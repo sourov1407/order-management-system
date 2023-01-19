@@ -32,4 +32,7 @@ public class ProductEntity extends BaseEntity {
     @Column(name = "quantity", nullable = false)
     private int count;
 
+    @Column(name = "issue_date")
+    private String issueDate;
+
 }

@@ -2,24 +2,13 @@ package mlab.order.management.service.product;
 
 import lombok.RequiredArgsConstructor;
 import mlab.order.management.model.dto.ProductDto;
-import mlab.order.management.model.dto.UserDto;
 import mlab.order.management.model.entity.ProductEntity;
-import mlab.order.management.model.entity.RoleEntity;
-import mlab.order.management.model.entity.UserEntity;
 import mlab.order.management.model.request.product.ProductCreateRequest;
 import mlab.order.management.model.request.product.ProductUpdateRequest;
-import mlab.order.management.model.request.user.UserCreateRequest;
-import mlab.order.management.model.request.user.UserUpdateRequest;
-import org.springframework.security.core.GrantedAuthority;
-import org.springframework.security.core.authority.SimpleGrantedAuthority;
-import org.springframework.security.core.userdetails.User;
-import org.springframework.security.core.userdetails.UserDetails;
-import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Component;
 
-import java.util.Collection;
-import java.util.List;
-import java.util.stream.Collectors;
+import static mlab.order.management.util.DateTimeConvertUtil.convertApiToDbDate;
+import static mlab.order.management.util.DateTimeConvertUtil.convertDbToApiDate;
 
 @Component
 @RequiredArgsConstructor
@@ -31,6 +20,7 @@ public class ProductMapper {
                 .category(productEntity.getCategory())
                 .count(productEntity.getCount())
                 .skuId(productEntity.getSkuId())
+                .issueDate(convertDbToApiDate(productEntity.getIssueDate()))
                 .build();
     }
 
@@ -40,6 +30,7 @@ public class ProductMapper {
                 .category(request.getCategory())
                 .count(request.getCount())
                 .skuId(request.getSkuId())
+                .issueDate(convertApiToDbDate(request.getIssueDate()))
                 .build();
     }
 
@@ -48,5 +39,6 @@ public class ProductMapper {
         entity.setCount(request.getCount());
         entity.setSkuId(request.getSkuId());
         entity.setName(request.getName());
+        entity.setIssueDate(convertApiToDbDate(request.getIssueDate()));
     }
 }

@@ -17,5 +17,7 @@ public class ProductDto {
     private String category;
     @JsonProperty("quantity")
     private int count;
+    @JsonProperty("issue_date")
+    private String issueDate;
 
 }

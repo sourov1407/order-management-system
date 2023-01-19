@@ -9,6 +9,7 @@ import lombok.Setter;
 import javax.validation.constraints.Min;
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
+import javax.validation.constraints.Pattern;
 
 @Getter
 @Setter
@@ -29,5 +30,9 @@ public class ProductCreateRequest {
     @Min(value = 1, message = "validation.property.product.count.Min.message")
     @JsonProperty("quantity")
     private int count;
+    @JsonProperty("issue_date")
+    @Pattern(regexp = "^(0[1-9]|1[0-2])-(0[1-9]|1\\d|2\\d|3[01])-(19|20)\\d{2}$",
+            message = "validation.property.product.issueDate.Pattern.message")
+    private String issueDate;
 
 }
