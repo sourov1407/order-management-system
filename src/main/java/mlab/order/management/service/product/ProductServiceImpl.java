@@ -11,7 +11,7 @@ import mlab.order.management.model.request.product.ProductCreateRequest;
 import mlab.order.management.model.request.product.ProductUpdateRequest;
 import mlab.order.management.repository.CustomProductRepository;
 import mlab.order.management.repository.ProductRepository;
-import org.springframework.data.domain.PageRequest;
+import mlab.order.management.service.BaseService;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
@@ -21,7 +21,7 @@ import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
-public class ProductServiceImpl implements ProductService{
+public class ProductServiceImpl extends BaseService implements ProductService{
 
     private final CustomProductRepository customProductRepository;
     private final ProductRepository productRepository;
@@ -31,7 +31,8 @@ public class ProductServiceImpl implements ProductService{
     public ProductDto createProduct(ProductCreateRequest request) {
         productRepository.findDistinctByName(request.getName())
                 .ifPresent(productEntity -> {
-                    throw new BadRequestException("Product already exists");
+                    throw new BadRequestException(
+                            getLocaleMessage("api.product.exist"));
                 });
 
         ProductEntity product = mapper.mapToNewEntity(request);
@@ -43,7 +44,8 @@ public class ProductServiceImpl implements ProductService{
     public ProductDto updateProduct(ProductUpdateRequest productUpdateRequest) {
         ProductEntity product = productRepository.findById(productUpdateRequest.getId())
                 .orElseThrow(() -> {
-                    throw new RecordNotFoundException("Product Not Found");
+                    throw new RecordNotFoundException(
+                            getLocaleMessage("api.product.notFound"));
                 });
         mapper.mapUpdatedEntity(product, productUpdateRequest);
         productRepository.save(product);
@@ -60,7 +62,8 @@ public class ProductServiceImpl implements ProductService{
     @Override
     public ProductDto getProduct(long id) {
         ProductEntity product = productRepository.findById(id)
-                .orElseThrow(() -> new RecordNotFoundException("Product not found"));
+                .orElseThrow(() -> new RecordNotFoundException(
+                        getLocaleMessage("api.product.notFound")));
         return mapper.mapToDto(product);
     }
 
@@ -71,7 +74,9 @@ public class ProductServiceImpl implements ProductService{
                     productRepository.delete(productEntity);
                     return productEntity;
                 })
-                .orElseThrow(() -> new RecordNotFoundException("Product not found"));
+                .orElseThrow(() -> new RecordNotFoundException(
+                        getLocaleMessage("api.product.notFound")));
+
         return mapper.mapToDto(product);
     }
 

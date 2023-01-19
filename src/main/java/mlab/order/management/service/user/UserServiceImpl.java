@@ -10,6 +10,7 @@ import mlab.order.management.model.request.user.UserCreateRequest;
 import mlab.order.management.model.request.user.UserUpdateRequest;
 import mlab.order.management.repository.RoleRepository;
 import mlab.order.management.repository.UserRepository;
+import mlab.order.management.service.BaseService;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -18,7 +19,7 @@ import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
-public class UserServiceImpl implements UserService {
+public class UserServiceImpl extends BaseService implements UserService {
 
     private final UserRepository userRepository;
     private final RoleRepository roleRepository;
@@ -29,7 +30,7 @@ public class UserServiceImpl implements UserService {
         List<RoleEntity> roleEntities = roleRepository.findByNameIn(request.getRoles());
         userRepository.findDistinctByUsername(request.getUsername())
                 .ifPresent(userEntity -> {
-                    throw new BadRequestException("User already exists");
+                    throw new BadRequestException(getLocaleMessage("api.user.exist"));
                 });
 
         UserEntity userEntity = mapper.mapToNewEntity(request, roleEntities);
@@ -41,7 +42,7 @@ public class UserServiceImpl implements UserService {
     public UserDto updateUser(UserUpdateRequest userUpdateRequest) {
         UserEntity user = userRepository.findById(userUpdateRequest.getId())
                 .orElseThrow(() -> {
-                    throw new RecordNotFoundException("User Not Found");
+                    throw new RecordNotFoundException(getLocaleMessage("api.user.notFound"));
                 });
         mapper.mapUpdatedEntity(user, userUpdateRequest);
         userRepository.save(user);
@@ -58,7 +59,7 @@ public class UserServiceImpl implements UserService {
     @Override
     public UserDto getUser(long id) {
         UserEntity userEntity = userRepository.findById(id)
-                .orElseThrow(() -> new RecordNotFoundException("User not found"));
+                .orElseThrow(() -> new RecordNotFoundException(getLocaleMessage("api.user.notFound")));
         return mapper.mapToDto(userEntity);
     }
 
@@ -72,7 +73,7 @@ public class UserServiceImpl implements UserService {
                     userEntity.getOrders().clear();
                     userRepository.delete(userEntity);
                     return userEntity;
-                }).orElseThrow(() -> new RecordNotFoundException("User not found"));
+                }).orElseThrow(() -> new RecordNotFoundException(getLocaleMessage("api.user.notFound")));
         return mapper.mapToDto(user);
     }
 

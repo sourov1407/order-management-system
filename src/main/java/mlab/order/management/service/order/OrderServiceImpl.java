@@ -3,6 +3,7 @@ package mlab.order.management.service.order;
 import lombok.RequiredArgsConstructor;
 import mlab.order.management.exception.BadRequestException;
 import mlab.order.management.exception.RecordNotFoundException;
+import mlab.order.management.model.dto.EmailDto;
 import mlab.order.management.model.dto.OrderDto;
 import mlab.order.management.model.entity.OrderDetailsEntity;
 import mlab.order.management.model.entity.OrderEntity;
@@ -11,6 +12,7 @@ import mlab.order.management.model.request.order.OrderCreateRequest;
 import mlab.order.management.repository.OrderRepository;
 import mlab.order.management.repository.ProductRepository;
 import mlab.order.management.repository.UserRepository;
+import mlab.order.management.service.BaseService;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
@@ -22,7 +24,7 @@ import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
-public class OrderServiceImpl implements OrderService {
+public class OrderServiceImpl extends BaseService implements OrderService {
 
     private final UserRepository userRepository;
     private final ProductRepository productRepository;
@@ -38,7 +40,7 @@ public class OrderServiceImpl implements OrderService {
         validateOrderRequest(request);
         UserEntity userEntity = userRepository
                 .findById(request.getId())
-                .orElseThrow(() -> new RecordNotFoundException("User not found"));
+                .orElseThrow(() -> new RecordNotFoundException(getLocaleMessage("api.user.notFound")));
 
         Set<OrderDetailsEntity> orderEntities = getOrderDetailsEntities(request);
         OrderEntity orderEntity = OrderEntity
@@ -51,6 +53,10 @@ public class OrderServiceImpl implements OrderService {
                 orderDetailsEntity.setOrder(orderEntity));
         userEntity.getOrders().add(orderEntity);
         userRepository.save(userEntity);
+        sendEmail(EmailDto.builder()
+                .email("test@abc.com")
+                .body("Test mail sending")
+                .build());
 
         return mapper.mapToDto(orderEntity);
     }

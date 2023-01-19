@@ -13,7 +13,7 @@ import java.util.List;
 @Builder
 public class OrderCreateRequest {
 
-    @NotNull(message = "User id can not be empty")
+    @NotNull(message = "validation.property.order.id.NotBlank.message")
     @JsonProperty("user_id")
     private long id;
     @JsonProperty("order_details")

@@ -16,16 +16,16 @@ import java.util.List;
 @NoArgsConstructor
 @AllArgsConstructor
 public class UserCreateRequest {
-    @NotBlank(message = "UserName can not be empty")
+    @NotBlank(message = "validation.property.user.username.NotBlank.message")
     @JsonProperty("user_name")
     private String username;
-    @NotBlank(message = "Password can not be empty")
+    @NotBlank(message = "validation.property.user.password.NotBlank.message")
     private String password;
-    @NotBlank(message = "Name can not be empty")
+    @NotBlank(message = "validation.property.user.fullName.NotBlank.message")
     @JsonProperty("full_name")
     private String fullName;
-    @Email(message = "Email address is invalid")
+    @Email(message = "validation.property.user.email.Email.message")
     private String email;
-    @NotNull(message = "Roles can not be empty")
+    @NotNull(message = "validation.property.user.roles.NotNull.message")
     private List<String> roles;
 }

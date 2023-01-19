@@ -16,17 +16,17 @@ import javax.validation.constraints.NotNull;
 @AllArgsConstructor
 public class ProductCreateRequest {
 
-    @NotBlank(message = "Product name can not be empty")
+    @NotBlank(message = "validation.property.product.name.NotBlank.message")
     @JsonProperty("product_name")
     private String name;
-    @NotBlank(message = "SKU can not be empty")
+    @NotBlank(message = "validation.property.product.skuId.NotBlank.message")
     @JsonProperty("sku_no")
     private String skuId;
-    @NotBlank(message = "Category can not be empty")
+    @NotBlank(message = "validation.property.product.category.NotBlank.message")
     @JsonProperty("category")
     private String category;
-    @NotNull(message = "Quantity must be specified")
-    @Min(value = 1, message = "Minimul valid count is 1")
+    @NotNull(message = "validation.property.product.count.NotNull.message")
+    @Min(value = 1, message = "validation.property.product.count.Min.message")
     @JsonProperty("quantity")
     private int count;
 
