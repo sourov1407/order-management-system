@@ -5,6 +5,8 @@ import lombok.Builder;
 import lombok.Getter;
 import lombok.Setter;
 
+import javax.validation.Valid;
+import javax.validation.constraints.Max;
 import javax.validation.constraints.NotNull;
 
 @Getter
@@ -17,6 +19,7 @@ public class OrderDetailsRequest {
     private long id;
     @NotNull(message = "Quantity Can not be null")
     @JsonProperty("product_quantity")
+    @Max(value = 4, message = "validation.property.order.quantity.Max.message")
     private int quantity;
 
 }

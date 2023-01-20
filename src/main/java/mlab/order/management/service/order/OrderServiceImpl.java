@@ -13,7 +13,6 @@ import mlab.order.management.repository.OrderRepository;
 import mlab.order.management.repository.ProductRepository;
 import mlab.order.management.repository.UserRepository;
 import mlab.order.management.service.BaseService;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.util.CollectionUtils;
@@ -31,12 +30,8 @@ public class OrderServiceImpl extends BaseService implements OrderService {
     private final OrderRepository orderRepository;
     private final OrderMapper mapper;
 
-    @Value("${order.max-quantity-per-product}")
-    private int maxQuantity;
-
     @Override
     public OrderDto createOrder(OrderCreateRequest request) {
-
         validateOrderRequest(request);
         UserEntity userEntity = userRepository
                 .findById(request.getId())
@@ -64,9 +59,9 @@ public class OrderServiceImpl extends BaseService implements OrderService {
     @Override
     public List<OrderDto> searchOrder(String name, String category, Pageable pageable) {
 
-        if(name != null) {
-            return getOrdersByProductName(name,pageable);
-        } else if(category != null) {
+        if (name != null) {
+            return getOrdersByProductName(name, pageable);
+        } else if (category != null) {
             return getOrdersByProductCategory(category, pageable);
         } else return orderRepository.findAll().stream()
                 .map(mapper::mapToDto)
@@ -97,31 +92,25 @@ public class OrderServiceImpl extends BaseService implements OrderService {
     private Set<OrderDetailsEntity> getOrderDetailsEntities(OrderCreateRequest request) {
         return request.getOrderDetails().stream()
                 .map(orderDetailsRequest ->
-                    OrderDetailsEntity.builder()
-                            .product(productRepository
-                                    .findById(orderDetailsRequest.getId())
-                                    .map(productEntity -> {
-                                        if(productEntity.getCount() < orderDetailsRequest.getQuantity()) {
-                                            throw new BadRequestException("Requested product count exceeds the quantity");
-                                        }
-                                        productEntity.setCount(productEntity.getCount() - orderDetailsRequest.getQuantity());
-                                        return productEntity;
-                                    })
-                                    .orElseThrow(() -> new RecordNotFoundException("Product not found")))
-                            .productQuantity(orderDetailsRequest.getQuantity())
-                            .build()
-                    ).collect(Collectors.toSet());
+                        OrderDetailsEntity.builder()
+                                .product(productRepository
+                                        .findById(orderDetailsRequest.getId())
+                                        .map(productEntity -> {
+                                            if (productEntity.getCount() < orderDetailsRequest.getQuantity()) {
+                                                throw new BadRequestException("Requested product count exceeds the quantity");
+                                            }
+                                            productEntity.setCount(productEntity.getCount() - orderDetailsRequest.getQuantity());
+                                            return productEntity;
+                                        })
+                                        .orElseThrow(() -> new RecordNotFoundException("Product not found")))
+                                .productQuantity(orderDetailsRequest.getQuantity())
+                                .build()
+                ).collect(Collectors.toSet());
     }
 
     private void validateOrderRequest(OrderCreateRequest request) {
         if (CollectionUtils.isEmpty(request.getOrderDetails())) {
             throw new BadRequestException("Order details can not be empty");
         }
-
-        request.getOrderDetails().forEach(orderDetailsRequest -> {
-            if (orderDetailsRequest.getQuantity() > maxQuantity) {
-                throw new BadRequestException("Product request quantity exceeds max quantity per order");
-            }
-        });
     }
 }

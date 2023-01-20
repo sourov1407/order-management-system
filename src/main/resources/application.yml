@@ -2,35 +2,5 @@ server:
   port: 8081
 
 spring:
-  datasource:
-    url: ${DB_URL:jdbc:mysql://127.0.0.1:3306/order_db}
-    username: ${DB_USERNAME:root}
-    password: ${DB_PASSWORD:root}
-    driver-class-name: com.mysql.cj.jdbc.Driver
-  jpa:
-    database-platform: org.hibernate.dialect.MySQL5Dialect
-    generate-ddl: true
-    properties:
-      hibernate:
-        ddl-auto: create
-        show_sql: true
-        format_sql: true
-        enable_lazy_load_no_trans: true
-
-  mvc:
-    pathmatch:
-      matching-strategy: ant_path_matcher
-
-  flyway:
-    enabled: false
-    baseline-on-migrate: true
-
-jwt:
-  token-validity: 10
-  auth-header-name: Authorization
-  signing-key: 16xhi4l0tulkWx69Z6kr9ewMyW2saaHe16xhi4l0tulkWx69Z6kr9ewMyW2saaHe
-  token-prefix: Bearer
-  token-validation-regex: ^Bearer\s[A-Za-z0-9-_=]+\.[A-Za-z0-9-_=]+\.?[A-Za-z0-9-_.+/=]*$
-
-order:
-  max-quantity-per-product: 4
+  profiles:
+    active: ${ACTIVE_PROFILE:dev}
