@@ -1,7 +1,5 @@
 package mlab.order.management;
 
-import lombok.AllArgsConstructor;
-import lombok.NoArgsConstructor;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import mlab.order.management.model.request.product.ProductCreateRequest;
@@ -12,6 +10,7 @@ import mlab.order.management.service.user.UserService;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.ApplicationListener;
 import org.springframework.context.event.ContextRefreshedEvent;
+import org.springframework.core.env.Environment;
 import org.springframework.stereotype.Component;
 import org.springframework.util.CollectionUtils;
 
@@ -30,13 +29,15 @@ public class AppSeeder implements ApplicationListener<ContextRefreshedEvent> {
     private final RoleService roleService;
     private final UserService userService;
     private final ProductService productService;
+    private final Environment environment;
 
     @Override
     public void onApplicationEvent(ContextRefreshedEvent event) {
         if(isSeederEnabled.equals(TRUE)){
+            if(environment.getActiveProfiles()[0].equals("test"))
+                populateProduct();
             populateRoles();
             populateUsers();
-            populateProduct();
         }
     }
 
