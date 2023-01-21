@@ -18,7 +18,7 @@
     ```
 1. Build project without test:
     ```
-    gradle clean build -DskipTest=true
+    mvn clean install -DskipTest=true
     ```
 1. jar will be found under this folder:
     ```
