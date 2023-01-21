@@ -3,12 +3,7 @@ package mlab.order.management.service.order;
 import lombok.RequiredArgsConstructor;
 import mlab.order.management.model.dto.OrderDetailsDto;
 import mlab.order.management.model.dto.OrderDto;
-import mlab.order.management.model.dto.ProductDto;
 import mlab.order.management.model.entity.OrderEntity;
-import mlab.order.management.model.entity.ProductEntity;
-import mlab.order.management.model.request.product.ProductCreateRequest;
-import mlab.order.management.model.request.product.ProductUpdateRequest;
-import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Component;
 
 import java.util.Set;

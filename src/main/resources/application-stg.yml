@@ -19,7 +19,7 @@ spring:
       matching-strategy: ant_path_matcher
 
   flyway:
-    enabled: false
+    enabled: true
     baseline-on-migrate: true
 
 jwt:
@@ -28,3 +28,7 @@ jwt:
   signing-key: 16xhi4l0tulkWx69Z6kr9ewMyW2saaHe16xhi4l0tulkWx69Z6kr9ewMyW2saaHe
   token-prefix: Bearer
   token-validation-regex: ^Bearer\s[A-Za-z0-9-_=]+\.[A-Za-z0-9-_=]+\.?[A-Za-z0-9-_.+/=]*$
+
+app:
+  seeder:
+    enable: false

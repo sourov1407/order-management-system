@@ -10,6 +10,7 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.springframework.boot.test.mock.mockito.MockBean;
+import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.context.TestPropertySource;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
 
@@ -22,7 +23,7 @@ import static org.mockito.ArgumentMatchers.*;
 import static org.mockito.Mockito.*;
 
 @ExtendWith(SpringExtension.class)
-@TestPropertySource("classpath:application.yml")
+@ActiveProfiles("test")
 public class UserServiceTest {
 
     private UserService userService;
@@ -66,6 +67,27 @@ public class UserServiceTest {
         assertEquals(result.getRoles(), Collections.singletonList("USER"));
 
         verify(userRepository, times(1)).save(any());
+    }
 
+    @Test
+    void getUserTest(){
+        UserDto userDto = UserDto.builder()
+                .userName("test username")
+                .email("test@mail.com")
+                .name("test name")
+                .roles(Arrays.asList("USER"))
+                .build();
+
+        when(userRepository.findById(any())).thenReturn(Optional.of(new UserEntity()));
+        when(userMapper.mapToDto(any())).thenReturn(userDto);
+
+        UserDto result = userService.getUser(1);
+
+        assertEquals(result.getUserName(), "test username");
+        assertEquals(result.getEmail(), "test@mail.com");
+        assertEquals(result.getName(), "test name");
+        assertEquals(result.getRoles(), Collections.singletonList("USER"));
+
+        verify(userRepository, times(1)).findById(any());
     }
 }

@@ -52,4 +52,7 @@ public class UserEntity extends BaseEntity {
     @OneToMany(cascade = {CascadeType.PERSIST, CascadeType.MERGE}, fetch = FetchType.LAZY, mappedBy = "user")
     private Set<OrderEntity> orders = new HashSet<>();
 
+    @OneToMany(cascade = {CascadeType.PERSIST, CascadeType.MERGE}, fetch = FetchType.LAZY, mappedBy = "user")
+    private Set<ReviewEntity> reviews = new HashSet<>();
+
 }
