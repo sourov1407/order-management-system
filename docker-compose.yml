@@ -6,7 +6,6 @@ services:
     container_name: order_mysql_db
     environment:
       MYSQL_DATABASE: order_db
-      MYSQL_USER: root
       MYSQL_ROOT_PASSWORD: root
     ports:
       - 3306:3306
